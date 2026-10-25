@@ -158,11 +158,11 @@
                     <small class="text-muted">Daftar capaian belajar siswa pada mata pelajaran yang Anda ampu</small>
                 </div>
                 <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-sm btn-success rounded-pill px-3" onclick="alert('Fitur tambah nilai siswa siap digunakan!');">
+                    <a href="{{ route('guru.nilai.input') }}" class="btn btn-sm btn-success rounded-pill px-3">
                         <i class="bi bi-plus-circle me-1"></i> Input Nilai Baru
-                    </button>
-                    <a href="{{ route('nilai') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                        <i class="bi bi-printer me-1"></i> Cetak Leger
+                    </a>
+                    <a href="{{ route('guru.nilai') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                        <i class="bi bi-table me-1"></i> Buka Data Nilai
                     </a>
                 </div>
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\NilaiSiswa;
 use App\Models\Pengelola;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
@@ -16,7 +17,7 @@ class DatabaseInitService
 {
     /**
      * Memastikan database MySQL 'portalnilai' tersedia,
-     * tabel 'pengelola' sudah dibuat, dan 2 data user dummy (Admin & Guru) tersimpan.
+     * tabel 'pengelola' & 'nilaisiswa' sudah dibuat, dan data awal tersimpan.
      */
     public static function ensureDatabaseReady(): void
     {
@@ -71,6 +72,35 @@ class DatabaseInitService
             // 6. Simpan 2 akun dummy (Admin & Guru) ke tabel pengelola
             self::seedDummyPengelola();
 
+            // 7. Pastikan tabel 'nilaisiswa' tersedia di database
+            if (!Schema::hasTable('nilaisiswa')) {
+                Schema::create('nilaisiswa', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('nisn', 20)->index();
+                    $table->string('nis', 20)->nullable();
+                    $table->string('nama', 150);
+                    $table->string('kelas', 20);
+                    $table->string('tingkat', 10)->nullable();
+                    $table->string('jenis_kelamin', 20)->nullable();
+                    $table->string('semester', 50)->default('Ganjil 2024/2025');
+                    $table->string('wali_kelas', 150)->nullable();
+                    $table->string('mapel', 100)->index();
+                    $table->string('guru', 150)->nullable();
+                    $table->decimal('kkm', 5, 1)->default(75.0);
+                    $table->decimal('tugas', 5, 1)->default(0.0);
+                    $table->decimal('uts', 5, 1)->default(0.0);
+                    $table->decimal('uas', 5, 1)->default(0.0);
+                    $table->decimal('akhir', 5, 1)->default(0.0);
+                    $table->string('predikat', 5)->default('C');
+                    $table->string('status', 30)->default('Lulus');
+                    $table->text('catatan')->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            // 8. Simpan seluruh data awal nilai siswa ke tabel 'nilaisiswa' jika belum ada
+            self::seedInitialNilaiSiswa();
+
         } catch (Exception $e) {
             logger()->error('DatabaseInitService error: ' . $e->getMessage());
         }
@@ -115,6 +145,54 @@ class DatabaseInitService
             );
         } catch (Exception $e) {
             logger()->error('SeedDummyPengelola error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Simpan seluruh data awal nilai siswa ke tabel 'nilaisiswa'
+     */
+    public static function seedInitialNilaiSiswa(bool $forceReset = false): void
+    {
+        try {
+            if (!Schema::hasTable('nilaisiswa')) {
+                return;
+            }
+
+            if ($forceReset) {
+                NilaiSiswa::truncate();
+            } elseif (NilaiSiswa::count() > 0) {
+                return; // Data sudah ada
+            }
+
+            $portalData = new PortalDataService();
+            $defaultSiswa = $portalData->getDefaultMockSiswaNilai();
+
+            foreach ($defaultSiswa as $siswa) {
+                foreach ($siswa['nilai'] as $n) {
+                    NilaiSiswa::create([
+                        'nisn' => $siswa['nisn'],
+                        'nis' => $siswa['nis'] ?? null,
+                        'nama' => $siswa['nama'],
+                        'kelas' => $siswa['kelas'],
+                        'tingkat' => $siswa['tingkat'] ?? substr($siswa['kelas'], 0, 1),
+                        'jenis_kelamin' => $siswa['jenis_kelamin'] ?? 'Laki-laki',
+                        'semester' => $siswa['semester'] ?? 'Ganjil 2024/2025',
+                        'wali_kelas' => $siswa['wali_kelas'] ?? null,
+                        'mapel' => $n['mapel'],
+                        'guru' => $n['guru'] ?? null,
+                        'kkm' => (float) ($n['kkm'] ?? 75),
+                        'tugas' => (float) ($n['tugas'] ?? 0),
+                        'uts' => (float) ($n['uts'] ?? 0),
+                        'uas' => (float) ($n['uas'] ?? 0),
+                        'akhir' => (float) ($n['akhir'] ?? 0),
+                        'predikat' => $n['predikat'] ?? 'C',
+                        'status' => $n['status'] ?? 'Lulus',
+                        'catatan' => $n['catatan'] ?? 'Capaian kompetensi tuntas sesuai kriteria ketercapaian tujuan pembelajaran.',
+                    ]);
+                }
+            }
+        } catch (Exception $e) {
+            logger()->error('seedInitialNilaiSiswa error: ' . $e->getMessage());
         }
     }
 }

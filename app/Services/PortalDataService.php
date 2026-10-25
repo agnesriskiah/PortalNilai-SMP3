@@ -76,9 +76,63 @@ class PortalDataService
     }
 
     /**
-     * Database Mock Nilai Siswa
+     * Ambil Seluruh Data Nilai Siswa dari Database MySQL (Tabel nilaisiswa)
      */
     public function getAllSiswaNilai(): array
+    {
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('nilaisiswa')) {
+                $rows = \App\Models\NilaiSiswa::orderBy('kelas')->orderBy('nama')->get();
+                if ($rows->count() > 0) {
+                    $grouped = $rows->groupBy('nisn');
+                    $result = [];
+                    $counter = 1;
+                    foreach ($grouped as $nisn => $items) {
+                        $first = $items->first();
+                        $nilaiList = [];
+                        foreach ($items as $item) {
+                            $nilaiList[] = [
+                                'mapel' => $item->mapel,
+                                'guru' => $item->guru,
+                                'kkm' => (float) $item->kkm,
+                                'tugas' => (float) $item->tugas,
+                                'uts' => (float) $item->uts,
+                                'uas' => (float) $item->uas,
+                                'akhir' => (float) $item->akhir,
+                                'predikat' => $item->predikat,
+                                'status' => $item->status,
+                                'catatan' => $item->catatan,
+                            ];
+                        }
+                        $result[] = [
+                            'nisn' => $first->nisn,
+                            'nis' => $first->nis ?? '24250700' . $counter,
+                            'nama' => $first->nama,
+                            'kelas' => $first->kelas,
+                            'tingkat' => $first->tingkat ?? substr($first->kelas, 0, 1),
+                            'jenis_kelamin' => $first->jenis_kelamin ?? 'Laki-laki',
+                            'semester' => $first->semester ?? 'Ganjil 2024/2025',
+                            'wali_kelas' => $first->wali_kelas ?? 'Wali Kelas ' . $first->kelas,
+                            'peringkat' => $counter,
+                            'total_siswa_kelas' => 32,
+                            'nilai' => $nilaiList,
+                        ];
+                        $counter++;
+                    }
+                    return $result;
+                }
+            }
+        } catch (\Exception $e) {
+            // Fallback ke mock jika database offline
+        }
+
+        return $this->getDefaultMockSiswaNilai();
+    }
+
+    /**
+     * Database Mock Nilai Siswa (Data Awal / Fallback)
+     */
+    public function getDefaultMockSiswaNilai(): array
     {
         return [
             [

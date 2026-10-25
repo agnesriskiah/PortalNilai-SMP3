@@ -33,5 +33,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Dashboard Administrator IT
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-// Dashboard Dewan Guru
+// Ruang Kerja Dewan Guru
 Route::get('/guru/dashboard', [GuruDashboardController::class, 'dashboard'])->name('guru.dashboard');
+Route::get('/guru/nilai', [GuruDashboardController::class, 'dataNilai'])->name('guru.nilai');
+Route::get('/guru/nilai/input', [GuruDashboardController::class, 'formNilai'])->name('guru.nilai.input');
+Route::get('/guru/nilai/edit/{nisn}', [GuruDashboardController::class, 'formNilai'])->name('guru.nilai.edit');
+Route::post('/guru/nilai/simpan', [GuruDashboardController::class, 'simpanNilai'])->name('guru.nilai.simpan');
+Route::post('/guru/nilai/hapus/{nisn}', [GuruDashboardController::class, 'hapusNilai'])->name('guru.nilai.hapus');
+Route::post('/guru/nilai/reset', [GuruDashboardController::class, 'resetNilai'])->name('guru.nilai.reset');
