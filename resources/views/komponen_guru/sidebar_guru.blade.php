@@ -40,7 +40,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('nilai') }}" class="nav-link text-white {{ request()->routeIs('nilai*') ? 'active bg-success' : '' }} d-flex align-items-center gap-2 py-2 px-3 rounded-3">
+            <a href="{{ route('guru.nilai') }}" class="nav-link text-white {{ request()->routeIs('guru.nilai*') ? 'active bg-success' : '' }} d-flex align-items-center gap-2 py-2 px-3 rounded-3">
                 <i class="bi bi-pencil-square text-info fs-5"></i>
                 <span>Input & Nilai Siswa</span>
             </a>

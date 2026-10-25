@@ -112,8 +112,8 @@
 
                                 @if($userRole === 'guru')
                                     <li>
-                                        <a class="dropdown-item py-2 rounded-2" href="{{ route('nilai') }}">
-                                            <i class="bi bi-pencil-square me-2 text-success"></i> Rekapitulasi Nilai Siswa
+                                        <a class="dropdown-item py-2 rounded-2" href="{{ route('guru.nilai') }}">
+                                            <i class="bi bi-pencil-square me-2 text-success"></i> Input & Nilai Siswa
                                         </a>
                                     </li>
                                     <li>
