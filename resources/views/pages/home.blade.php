@@ -534,9 +534,13 @@
             @foreach($guruUnggulan as $g)
                 <div class="col-md-6 col-lg-3">
                     <div class="teacher-card p-4 text-center h-100">
-                        <div class="teacher-avatar {{ $g['avatar_color'] }}">
-                            {{ mb_substr($g['nama'], 0, 1) }}
-                        </div>
+                        @if(!empty($g['foto_url']))
+                            <img src="{{ $g['foto_url'] }}" alt="{{ $g['nama'] }}" class="rounded-circle object-fit-cover shadow-sm mx-auto d-block mb-3 border border-2 border-primary-subtle" style="width: 72px; height: 72px;">
+                        @else
+                            <div class="teacher-avatar {{ $g['avatar_color'] }}">
+                                {{ mb_substr($g['nama'], 0, 1) }}
+                            </div>
+                        @endif
                         <h6 class="fw-bold text-dark mb-1">{{ $g['nama'] }}</h6>
                         <span class="badge bg-light text-primary border mb-2">{{ $g['mapel'] }}</span>
                         <div class="text-muted small mb-2">{{ $g['jabatan'] }}</div>
