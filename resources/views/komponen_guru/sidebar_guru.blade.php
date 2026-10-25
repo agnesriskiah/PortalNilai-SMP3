@@ -1,7 +1,9 @@
 <!-- Sidebar Guru Component -->
 @php
     $guru = auth()->user() ?? (object) session('user');
-    $guruFoto = $guru->foto ?? 'assets/img/users/guru.svg';
+    $guruFoto = ($guru->foto && str_starts_with($guru->foto, 'foto_guru/'))
+        ? route('guru.foto', $guru->id)
+        : asset($guru->foto ?? 'assets/img/users/guru.svg');
 @endphp
 
 <div class="sidebar-guru d-flex flex-column flex-shrink-0 p-3 bg-dark text-white min-vh-100 shadow" style="width: 280px; background: linear-gradient(180deg, #064e3b 0%, #0f172a 100%) !important;">
@@ -17,7 +19,7 @@
     <!-- Guru Profile Badge -->
     <div class="my-3 p-3 rounded-3 bg-success bg-opacity-20 border border-success border-opacity-50">
         <div class="d-flex align-items-center gap-2">
-            <img src="{{ asset($guruFoto) }}" alt="{{ $guru->name }}" width="48" height="48" class="rounded-circle border border-2 border-warning p-0 bg-white">
+            <img src="{{ $guruFoto }}" alt="{{ $guru->name }}" width="48" height="48" class="rounded-circle border border-2 border-warning p-0 bg-white object-fit-cover">
             <div class="overflow-hidden">
                 <span class="badge bg-success text-uppercase fw-bold px-2 py-0" style="font-size: 0.65rem;">Dewan Guru</span>
                 <strong class="d-block text-truncate text-white small fw-bold mt-1">{{ $guru->name }}</strong>

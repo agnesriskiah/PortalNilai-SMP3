@@ -68,10 +68,16 @@
             <div class="col-lg-4 col-md-6">
                 <div class="teacher-card p-4 h-100 d-flex flex-direction-column justify-content-between">
                     <div>
-                        <!-- Avatar Badge -->
-                        <div class="teacher-avatar {{ $item['avatar_color'] }}">
-                            {{ mb_substr($item['nama'], 0, 1) }}
-                        </div>
+                        <!-- Avatar Badge or Photo -->
+                        @if(!empty($item['foto_url']))
+                            <div class="text-center mb-3">
+                                <img src="{{ $item['foto_url'] }}" alt="{{ $item['nama'] }}" class="rounded-circle object-fit-cover shadow-sm mx-auto d-block border border-3 border-primary-subtle" style="width: 76px; height: 76px;">
+                            </div>
+                        @else
+                            <div class="teacher-avatar {{ $item['avatar_color'] }}">
+                                {{ mb_substr($item['nama'], 0, 1) }}
+                            </div>
+                        @endif
 
                         <!-- Name & Subject -->
                         <div class="text-center mb-3">

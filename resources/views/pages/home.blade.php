@@ -533,14 +533,14 @@
         <div class="row g-4">
             @foreach($guruUnggulan as $g)
                 <div class="col-md-6 col-lg-3">
-                    <div class="teacher-card-modern shadow-sm">
-                        <div class="teacher-avatar-circle {{ $g['avatar_color'] ?? 'bg-primary' }}">
+                    <div class="teacher-card p-4 text-center h-100">
+                        <div class="teacher-avatar {{ $g['avatar_color'] }}">
                             {{ mb_substr($g['nama'], 0, 1) }}
                         </div>
-                        <h6 class="fw-bold text-dark mb-1 text-truncate">{{ $g['nama'] }}</h6>
-                        <span class="badge bg-light text-primary border mb-2 fw-semibold">{{ $g['mapel'] }}</span>
-                        <div class="text-muted small text-truncate mb-2">{{ $g['jabatan'] }}</div>
-                        <small class="text-secondary d-block" style="font-size: 0.72rem;">NIP: {{ $g['nip'] }}</small>
+                        <h6 class="fw-bold text-dark mb-1">{{ $g['nama'] }}</h6>
+                        <span class="badge bg-light text-primary border mb-2">{{ $g['mapel'] }}</span>
+                        <div class="text-muted small mb-2">{{ $g['jabatan'] }}</div>
+                        <small class="text-secondary d-block">NIP: {{ $g['nip'] }}</small>
                     </div>
                 </div>
             @endforeach

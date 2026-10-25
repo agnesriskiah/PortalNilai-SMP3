@@ -9,6 +9,18 @@ class PortalDataService
      */
     public function getProfilSekolah(): array
     {
+        $totalGuruStaff = 12;
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('pengelola')) {
+                $count = \App\Models\Pengelola::where('role', 'guru')->count();
+                if ($count > 0) {
+                    $totalGuruStaff = $count;
+                }
+            }
+        } catch (\Exception $e) {
+            // fallback jika database belum siap
+        }
+
         return [
             'nama' => 'SMP Negeri 3 Unggulan',
             'singkatan' => 'SMPN 3',
@@ -34,7 +46,7 @@ class PortalDataService
             ],
             'statistik' => [
                 'siswa_aktif' => 864,
-                'guru_staff' => 48,
+                'guru_staff' => $totalGuruStaff,
                 'rombongan_belajar' => 24,
                 'tingkat_kelulusan' => '100%',
                 'rata_rata_sekolah' => 86.4
@@ -483,6 +495,65 @@ class PortalDataService
      */
     public function getDaftarGuru(?string $mapel = null, ?string $search = null): array
     {
+        // 1. Prioritaskan pembacaan data dinamis dari database MySQL (tabel pengelola)
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('pengelola')) {
+                $query = \App\Models\Pengelola::where('role', 'guru');
+
+                if ($mapel && $mapel !== 'Semua') {
+                    $query->where('mapel', 'like', "%{$mapel}%");
+                }
+
+                if ($search) {
+                    $s = trim($search);
+                    $query->where(function ($q) use ($s) {
+                        $q->where('name', 'like', "%{$s}%")
+                          ->orWhere('nip', 'like', "%{$s}%")
+                          ->orWhere('mapel', 'like', "%{$s}%")
+                          ->orWhere('email', 'like', "%{$s}%")
+                          ->orWhere('jabatan', 'like', "%{$s}%");
+                    });
+                }
+
+                $dbGuru = $query->orderBy('id', 'asc')->get();
+
+                if ($dbGuru->isNotEmpty()) {
+                    $colors = [
+                        'bg-primary', 'bg-indigo', 'bg-info', 'bg-success',
+                        'bg-teal', 'bg-purple', 'bg-dark', 'bg-warning',
+                        'bg-emerald', 'bg-danger', 'bg-pink', 'bg-secondary'
+                    ];
+
+                    return $dbGuru->map(function ($item, $index) use ($colors) {
+                        $fotoUrl = null;
+                        if ($item->foto && file_exists(storage_path('foto_guru/' . basename($item->foto)))) {
+                            $fotoUrl = route('guru.foto', $item->id);
+                        } elseif ($item->foto && file_exists(public_path($item->foto))) {
+                            $fotoUrl = asset($item->foto);
+                        }
+
+                        return [
+                            'id' => $item->id,
+                            'nama' => $item->name,
+                            'nip' => $item->nip ?: '-',
+                            'jabatan' => $item->jabatan ?: 'Guru Pengampu Mata Pelajaran',
+                            'mapel' => $item->mapel ?: 'Umum',
+                            'pendidikan' => $item->pendidikan ?: 'Tenaga Pendidik Bersertifikasi',
+                            'pengalaman' => $item->pengalaman ?: 'Aktif',
+                            'email' => $item->email,
+                            'no_hp' => $item->no_hp ?: '-',
+                            'foto' => $item->foto,
+                            'foto_url' => $fotoUrl,
+                            'avatar_color' => $colors[$index % count($colors)]
+                        ];
+                    })->toArray();
+                }
+            }
+        } catch (\Exception $e) {
+            logger()->error('Error getDaftarGuru from database: ' . $e->getMessage());
+        }
+
+        // 2. Fallback ke data statis jika database MySQL belum terhubung
         $guru = [
             [
                 'id' => 1,

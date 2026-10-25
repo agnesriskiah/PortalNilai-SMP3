@@ -77,12 +77,14 @@
                             $user = auth()->user() ?? (object) session('user');
                             $userRole = $user->role ?? 'user';
                             $dashboardRoute = $userRole === 'admin' ? route('admin.dashboard') : route('guru.dashboard');
-                            $userPhoto = $user->foto ?? ($userRole === 'admin' ? 'assets/img/users/admin.svg' : 'assets/img/users/guru.svg');
+                            $userPhoto = ($user->foto && str_starts_with($user->foto, 'foto_guru/'))
+                                ? route('guru.foto', $user->id)
+                                : asset($user->foto ?? ($userRole === 'admin' ? 'assets/img/users/admin.svg' : 'assets/img/users/guru.svg'));
                         @endphp
                         <!-- User Profile Dropdown when Logged In -->
                         <div class="dropdown">
                             <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2 py-2 px-3 rounded-3 shadow-sm bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ asset($userPhoto) }}" alt="{{ $user->name }}" width="28" height="28" class="rounded-circle border">
+                                <img src="{{ $userPhoto }}" alt="{{ $user->name }}" width="28" height="28" class="rounded-circle border object-fit-cover">
                                 <span class="badge {{ $userRole === 'guru' ? 'bg-success' : 'bg-dark' }} text-uppercase">
                                     {{ $userRole }}
                                 </span>
