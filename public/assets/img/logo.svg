@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="gradShield" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Ring -->
+  <circle cx="100" cy="100" r="94" fill="none" stroke="url(#gradGold)" stroke-width="4" stroke-dasharray="8, 4" />
+  <circle cx="100" cy="100" r="88" fill="#ffffff" stroke="#1e3a8a" stroke-width="3" />
+
+  <!-- Shield Background -->
+  <path d="M100 28 L152 46 C152 108 100 156 100 156 C100 156 48 108 48 46 Z" fill="url(#gradShield)" stroke="#ffffff" stroke-width="2" />
+
+  <!-- Golden Laurel / Wheat Garland Left & Right -->
+  <path d="M52 100 C50 120 70 148 100 168 C130 148 150 120 148 100" fill="none" stroke="url(#gradGold)" stroke-width="3" stroke-linecap="round" />
+
+  <!-- Open Book Symbol (Pendidikan) -->
+  <path d="M72 106 C84 100 96 104 100 108 C104 104 116 100 128 106 L128 88 C116 82 104 86 100 90 C96 86 84 82 72 88 Z" fill="#ffffff" opacity="0.95" />
+  <path d="M100 90 L100 114" stroke="#1e3a8a" stroke-width="2" />
+
+  <!-- Torch / Flame (Semangat Ilmu) -->
+  <path d="M100 52 C95 62 90 68 96 74 C99 77 101 77 104 74 C110 68 105 62 100 52 Z" fill="url(#gradGold)" />
+  <ellipse cx="100" cy="76" rx="4" ry="2" fill="#e2e8f0" />
+
+  <!-- Text '3' in Shield -->
+  <text x="100" y="138" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="22" fill="#ffffff" text-anchor="middle" letter-spacing="1">SMP 3</text>
+
+  <!-- Star at top -->
+  <polygon points="100,32 103,40 111,40 105,45 107,53 100,48 93,53 95,45 89,40 97,40" fill="url(#gradGold)" />
+</svg>

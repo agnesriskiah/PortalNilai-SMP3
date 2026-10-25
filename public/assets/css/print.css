@@ -1,0 +1,53 @@
+/**
+ * Print Stylesheet for PortalNilai-SMP3
+ * Clean black & white document layout for official transcripts
+ */
+
+@media print {
+    body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11pt;
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    .no-print,
+    .navbar,
+    .footer-portal,
+    .btn,
+    .alert,
+    #modalLogin {
+        display: none !important;
+    }
+
+    .print-container {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .kop-surat {
+        border-bottom: 3px double #000000;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+
+    th, td {
+        border: 1px solid #000000 !important;
+        padding: 6px 8px !important;
+    }
+
+    th {
+        background-color: #f0f0f0 !important;
+        font-weight: bold !important;
+    }
+
+    .signature-box {
+        page-break-inside: avoid;
+    }
+}
