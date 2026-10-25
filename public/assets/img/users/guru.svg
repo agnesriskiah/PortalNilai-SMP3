@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGuru" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="skinGuru" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#fdba74"/>
+    </linearGradient>
+    <linearGradient id="batik" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="120" cy="120" r="116" fill="url(#bgGuru)" stroke="#facc15" stroke-width="4"/>
+
+  <!-- Teacher Cap / Mortarboard Accent -->
+  <circle cx="190" cy="50" r="24" fill="#facc15" opacity="0.9"/>
+  <path d="M182 46 L190 42 L198 46 L190 50 Z" fill="#1e3a8a"/>
+  <rect x="189" y="50" width="2" height="6" fill="#1e3a8a"/>
+
+  <!-- Batik / Teacher Uniform (PGRI / Korpri style blue) -->
+  <path d="M50 240 C50 176 80 160 120 160 C160 160 190 176 190 240 Z" fill="url(#batik)"/>
+  <!-- Collar -->
+  <path d="M102 168 L120 192 L138 168 Z" fill="#ffffff"/>
+  <path d="M110 160 L120 176 L130 160 Z" fill="url(#skinGuru)"/>
+
+  <!-- Neck -->
+  <rect x="106" y="132" width="28" height="34" rx="4" fill="url(#skinGuru)"/>
+
+  <!-- Head -->
+  <ellipse cx="120" cy="106" rx="42" ry="46" fill="url(#skinGuru)"/>
+
+  <!-- Hair (Neat with slight side part) -->
+  <path d="M78 98 C78 64 96 48 120 48 C144 48 162 64 162 98 C150 78 136 72 120 72 C104 72 88 80 78 98 Z" fill="#172554"/>
+
+  <!-- Eyebrows -->
+  <path d="M94 92 Q104 88 112 92" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M128 92 Q136 88 146 92" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Eyes -->
+  <circle cx="103" cy="102" r="3.5" fill="#0f172a"/>
+  <circle cx="137" cy="102" r="3.5" fill="#0f172a"/>
+
+  <!-- Friendly Smile & Warm Teacher Expression -->
+  <path d="M106 128 Q120 140 134 128" fill="none" stroke="#b45309" stroke-width="3" stroke-linecap="round"/>
+</svg>

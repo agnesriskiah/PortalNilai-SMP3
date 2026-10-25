@@ -1,4 +1,4 @@
-<!-- Main Footer -->
+<!-- Main Footer Komponen Website -->
 <footer class="footer-portal">
     <div class="container">
         <div class="row g-4 justify-content-between">
@@ -31,16 +31,21 @@
                     <li><a href="{{ route('jadwal') }}"><i class="bi bi-chevron-right me-1 text-primary"></i> Jadwal Ujian</a></li>
                     <li><a href="{{ route('guru') }}"><i class="bi bi-chevron-right me-1 text-primary"></i> Dewan Guru</a></li>
 
-                    @if(session()->has('user'))
+                    @if(auth()->check() || session()->has('user'))
+                        @php
+                            $user = auth()->user() ?? (object) session('user');
+                            $userRole = $user->role ?? 'guru';
+                            $dashboardRoute = $userRole === 'admin' ? route('admin.dashboard') : route('guru.dashboard');
+                        @endphp
                         <li>
-                            <a href="{{ route('nilai') }}" class="text-info fw-bold">
-                                <i class="bi bi-pencil-square me-1"></i> Rekap Nilai Siswa
+                            <a href="{{ $dashboardRoute }}" class="text-warning fw-bold">
+                                <i class="bi bi-speedometer2 me-1"></i> Dashboard {{ ucfirst($userRole) }}
                             </a>
                         </li>
                     @else
                         <li>
                             <a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'text-warning fw-bold' : '' }}">
-                                <i class="bi bi-person-workspace me-1 text-primary"></i> Login Guru
+                                <i class="bi bi-box-arrow-in-right me-1 text-primary"></i> Login Portal
                             </a>
                         </li>
                     @endif
@@ -53,7 +58,7 @@
                 <ul class="list-unstyled d-flex flex-column gap-2 small">
                     <li><a href="{{ route('nilai') }}"><i class="bi bi-file-earmark-check me-1 text-info"></i> Rekapitulasi Nilai PAS/PTS</a></li>
                     <li><a href="{{ route('jadwal') }}"><i class="bi bi-clock-history me-1 text-info"></i> Kalender Ujian Semester</a></li>
-                    <li><a href="javascript:void(0)" onclick="alert('Pendaftaran remedial mata pelajaran dikoordinasikan langsung melalui guru pengampu masing-masing.');"><i class="bi bi-arrow-repeat me-1 text-info"></i> Pendaftaran Remedial</a></li>
+                    <li><a href="javascript:void(0)" onclick="alert('Pendaftaran remedial mata pelajaran dikoordinasikan langsung melalui dewan guru pengampu.');"><i class="bi bi-arrow-repeat me-1 text-info"></i> Pendaftaran Remedial</a></li>
                     <li><a href="javascript:void(0)" onclick="alert('Layanan konseling akademik SMPN 3 tersedia setiap hari sekolah di ruang BK.');"><i class="bi bi-chat-dots me-1 text-info"></i> Konseling Akademik & BK</a></li>
                 </ul>
             </div>
@@ -83,20 +88,29 @@
         </div>
 
         <!-- Sesi Status Bar if Logged In -->
-        @if(session()->has('user'))
+        @if(auth()->check() || session()->has('user'))
+            @php
+                $user = auth()->user() ?? (object) session('user');
+                $userRole = $user->role ?? 'user';
+            @endphp
             <div class="mt-4 p-3 rounded-3 bg-dark bg-opacity-75 border border-secondary border-opacity-25 d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
                 <div class="d-flex align-items-center gap-2 small text-light">
-                    <span class="badge {{ session('user.role') === 'guru' ? 'bg-success' : (session('user.role') === 'admin' ? 'bg-dark border' : 'bg-primary') }} text-uppercase">
-                        {{ session('user.role') }}
+                    <span class="badge {{ $userRole === 'guru' ? 'bg-success' : 'bg-dark border' }} text-uppercase">
+                        {{ $userRole }}
                     </span>
-                    <span>Anda terhubung sebagai: <strong>{{ session('user.name') }}</strong> (ID: {{ session('user.username') }})</span>
+                    <span>Anda terhubung sebagai: <strong>{{ $user->name }}</strong> (ID: {{ $user->username ?? $user->email }})</span>
                 </div>
-                <form action="{{ route('logout') }}" method="POST" class="m-0">
-                    @csrf
-                    <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-3 rounded-pill">
-                        <i class="bi bi-box-arrow-right me-1"></i> Logout Sekarang
-                    </button>
-                </form>
+                <div class="d-flex align-items-center gap-2">
+                    <a href="{{ $userRole === 'admin' ? route('admin.dashboard') : route('guru.dashboard') }}" class="btn btn-sm btn-primary py-1 px-3 rounded-pill">
+                        <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                    </a>
+                    <form action="{{ route('logout') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-3 rounded-pill">
+                            <i class="bi bi-box-arrow-right me-1"></i> Logout
+                        </button>
+                    </form>
+                </div>
             </div>
         @endif
 

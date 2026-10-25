@@ -28,10 +28,8 @@
 </head>
 <body>
 
-    <!-- Header & Navigation -->
-    @unless(request()->routeIs('login'))
-        @include('layouts.navbar')
-    @endunless
+    <!-- Header & Navigation Website Publik -->
+    @include('komponen_website.navbar')
 
     <!-- Flash Notifications -->
     <div class="container mt-3">
@@ -43,10 +41,8 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    @unless(request()->routeIs('login'))
-        @include('layouts.footer')
-    @endunless
+    <!-- Footer Website Publik -->
+    @include('komponen_website.footer')
 
     <!-- Bootstrap 5.3 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

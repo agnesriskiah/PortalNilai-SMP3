@@ -594,4 +594,41 @@ class PortalDataService
         }
         return null;
     }
+
+    /**
+     * Ambil seluruh rekap nilai siswa terformat
+     */
+    public function getSemuaNilai(): array
+    {
+        $all = $this->getAllSiswaNilai();
+        return array_map(function($s) {
+            $formatted = $this->formatSiswaNilai($s);
+            $mapelMap = [];
+            foreach ($s['nilai'] as $n) {
+                if (stripos($n['mapel'], 'Matematika') !== false) {
+                    $mapelMap['matematika'] = $n['akhir'];
+                } elseif (stripos($n['mapel'], 'Indonesia') !== false) {
+                    $mapelMap['bahasa_indonesia'] = $n['akhir'];
+                } elseif (stripos($n['mapel'], 'Inggris') !== false) {
+                    $mapelMap['bahasa_inggris'] = $n['akhir'];
+                } elseif (stripos($n['mapel'], 'Alam') !== false || stripos($n['mapel'], 'IPA') !== false) {
+                    $mapelMap['ipa'] = $n['akhir'];
+                }
+            }
+            $formatted['nilai_mapel'] = $mapelMap;
+            $formatted['rata_rata'] = $formatted['ringkasan']['rata_rata'] ?? 85.0;
+            return $formatted;
+        }, $all);
+    }
+
+    /**
+     * Ambil seluruh jadwal ujian
+     */
+    public function getSemuaJadwal(): array
+    {
+        return array_map(function($j) {
+            $j['ruangan'] = $j['ruang'] ?? '-';
+            return $j;
+        }, $this->getJadwalUjian());
+    }
 }

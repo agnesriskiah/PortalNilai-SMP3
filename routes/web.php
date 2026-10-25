@@ -7,31 +7,31 @@ use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GuruDashboardController;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - Portal Nilai SMP Negeri 3
+| Web Routes - Portal Nilai SMP Negeri 3 Unggulan
 |--------------------------------------------------------------------------
-| Struktur rute jelas, terorganisir, dan menggunakan named routes.
+| Struktur rute terorganisir, menggunakan named routes, dan controller terpisah.
 */
 
-// Beranda
+// Halaman Publik
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Tentang Kami
 Route::get('/tentang-kami', [TentangController::class, 'index'])->name('tentang');
-
-// Hasil Ujian / Nilai Siswa
 Route::get('/hasil-ujian', [NilaiController::class, 'index'])->name('nilai');
 Route::get('/hasil-ujian/cetak/{nisn}', [NilaiController::class, 'cetak'])->name('nilai.cetak');
-
-// Jadwal Ujian
 Route::get('/jadwal-ujian', [JadwalController::class, 'index'])->name('jadwal');
-
-// Daftar Guru
 Route::get('/guru', [GuruController::class, 'index'])->name('guru');
 
-// Autentikasi / Login
+// Autentikasi / Login & Logout (Khusus Guru & Admin)
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'processLogin'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Dashboard Administrator IT
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+// Dashboard Dewan Guru
+Route::get('/guru/dashboard', [GuruDashboardController::class, 'dashboard'])->name('guru.dashboard');

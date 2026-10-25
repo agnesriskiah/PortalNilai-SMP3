@@ -1,4 +1,4 @@
-<!-- Main Navbar -->
+<!-- Main Navbar Komponen Website -->
 <header class="sticky-top">
     <!-- Top notification banner for school info -->
     <div class="bg-dark text-white-50 py-1 px-3 d-none d-md-block" style="font-size: 0.8rem; background-color: #0b1329 !important;">
@@ -8,9 +8,12 @@
                 <span><i class="bi bi-telephone-fill text-info me-1"></i> (021) 7890-1234</span>
             </div>
             <div class="d-flex align-items-center gap-2">
-                @if(session()->has('user'))
+                @if(auth()->check() || session()->has('user'))
+                    @php
+                        $activeUser = auth()->user() ?? (object) session('user');
+                    @endphp
                     <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
-                        <i class="bi bi-circle-fill text-success me-1" style="font-size: 0.5rem;"></i> Sesi Aktif: {{ ucfirst(session('user.role')) }}
+                        <i class="bi bi-circle-fill text-success me-1" style="font-size: 0.5rem;"></i> Sesi Aktif: {{ ucfirst($activeUser->role ?? 'User') }}
                     </span>
                 @else
                     <span class="badge bg-warning text-dark fw-bold me-2">Akreditasi A</span>
@@ -69,45 +72,45 @@
 
                 <!-- Button Login / User Profile Dropdown -->
                 <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
-                    @if(session()->has('user'))
+                    @if(auth()->check() || session()->has('user'))
+                        @php
+                            $user = auth()->user() ?? (object) session('user');
+                            $userRole = $user->role ?? 'user';
+                            $dashboardRoute = $userRole === 'admin' ? route('admin.dashboard') : route('guru.dashboard');
+                            $userPhoto = $user->foto ?? ($userRole === 'admin' ? 'assets/img/users/admin.svg' : 'assets/img/users/guru.svg');
+                        @endphp
                         <!-- User Profile Dropdown when Logged In -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2 py-2 px-3 rounded-3 shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="badge {{ session('user.role') === 'guru' ? 'bg-success' : (session('user.role') === 'admin' ? 'bg-dark' : 'bg-primary') }} text-uppercase">
-                                    {{ session('user.role') }}
+                            <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2 py-2 px-3 rounded-3 shadow-sm bg-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ asset($userPhoto) }}" alt="{{ $user->name }}" width="28" height="28" class="rounded-circle border">
+                                <span class="badge {{ $userRole === 'guru' ? 'bg-success' : 'bg-dark' }} text-uppercase">
+                                    {{ $userRole }}
                                 </span>
-                                <span class="fw-semibold text-truncate" style="max-width: 150px;">
-                                    {{ session('user.name') }}
+                                <span class="fw-semibold text-truncate text-dark" style="max-width: 150px;">
+                                    {{ $user->name }}
                                 </span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-3 p-2" style="min-width: 250px;">
                                 <li class="px-3 py-2 border-bottom mb-2 bg-light rounded-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="p-2 rounded-circle {{ session('user.role') === 'guru' ? 'bg-success-subtle text-success' : (session('user.role') === 'admin' ? 'bg-dark-subtle text-dark' : 'bg-primary-subtle text-primary') }} fs-5">
-                                            <i class="bi {{ session('user.role') === 'guru' ? 'bi-person-workspace' : (session('user.role') === 'admin' ? 'bi-shield-lock-fill' : 'bi-mortarboard-fill') }}"></i>
-                                        </div>
+                                        <img src="{{ asset($userPhoto) }}" alt="{{ $user->name }}" width="40" height="40" class="rounded-circle border">
                                         <div class="overflow-hidden">
-                                            <strong class="d-block text-truncate text-dark">{{ session('user.name') }}</strong>
-                                            <span class="badge {{ session('user.role') === 'guru' ? 'bg-success' : (session('user.role') === 'admin' ? 'bg-dark' : 'bg-primary') }} text-uppercase small" style="font-size: 0.65rem;">
-                                                {{ session('user.role') }}
+                                            <strong class="d-block text-truncate text-dark">{{ $user->name }}</strong>
+                                            <span class="badge {{ $userRole === 'guru' ? 'bg-success' : 'bg-dark' }} text-uppercase small" style="font-size: 0.65rem;">
+                                                {{ $userRole }}
                                             </span>
-                                            <small class="text-muted d-block text-truncate">ID: {{ session('user.username') }}</small>
+                                            <small class="text-muted d-block text-truncate">ID: {{ $user->username ?? $user->email }}</small>
                                         </div>
                                     </div>
                                 </li>
 
-                                @if(session('user.role') === 'siswa')
-                                    <li>
-                                        <a class="dropdown-item py-2 rounded-2" href="{{ route('nilai', ['q' => session('user.username')]) }}">
-                                            <i class="bi bi-file-earmark-text me-2 text-primary"></i> Rapor Nilai Saya
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2 rounded-2" href="{{ route('jadwal') }}">
-                                            <i class="bi bi-calendar-event me-2 text-info"></i> Jadwal Ujian Saya
-                                        </a>
-                                    </li>
-                                @elseif(session('user.role') === 'guru')
+                                <li>
+                                    <a class="dropdown-item py-2 rounded-2 fw-semibold text-primary" href="{{ $dashboardRoute }}">
+                                        <i class="bi bi-speedometer2 me-2"></i> Buka Dashboard ({{ ucfirst($userRole) }})
+                                    </a>
+                                </li>
+
+                                @if($userRole === 'guru')
                                     <li>
                                         <a class="dropdown-item py-2 rounded-2" href="{{ route('nilai') }}">
                                             <i class="bi bi-pencil-square me-2 text-success"></i> Rekapitulasi Nilai Siswa
@@ -118,25 +121,15 @@
                                             <i class="bi bi-clock-history me-2 text-warning"></i> Jadwal Mengawas Ujian
                                         </a>
                                     </li>
-                                    <li>
-                                        <a class="dropdown-item py-2 rounded-2" href="{{ route('guru') }}">
-                                            <i class="bi bi-people me-2 text-primary"></i> Dewan Guru & Rekan
-                                        </a>
-                                    </li>
                                 @else
                                     <li>
+                                        <a class="dropdown-item py-2 rounded-2" href="{{ route('admin.dashboard') }}">
+                                            <i class="bi bi-shield-lock me-2 text-dark"></i> Panel Administrasi
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="dropdown-item py-2 rounded-2" href="{{ route('nilai') }}">
-                                            <i class="bi bi-speedometer2 me-2 text-dark"></i> Kelola Seluruh Nilai
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2 rounded-2" href="{{ route('jadwal') }}">
-                                            <i class="bi bi-calendar3 me-2 text-info"></i> Kelola Jadwal Ujian
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item py-2 rounded-2" href="{{ route('guru') }}">
-                                            <i class="bi bi-person-lines-fill me-2 text-primary"></i> Kelola Data Guru
+                                            <i class="bi bi-award me-2 text-info"></i> Seluruh Nilai Siswa
                                         </a>
                                     </li>
                                 @endif
@@ -154,10 +147,10 @@
                             </ul>
                         </div>
                     @else
-                        <!-- Button Login (Khusus Guru) -->
+                        <!-- Button Login -->
                         <a href="{{ route('login') }}" class="btn btn-portal-login d-flex align-items-center gap-2 {{ request()->routeIs('login') ? 'border border-2 border-warning shadow' : '' }}">
-                            <i class="bi bi-person-workspace fs-6"></i>
-                            <span>Login Guru</span>
+                            <i class="bi bi-box-arrow-in-right fs-6"></i>
+                            <span>Login Portal</span>
                         </a>
                     @endif
                 </div>
