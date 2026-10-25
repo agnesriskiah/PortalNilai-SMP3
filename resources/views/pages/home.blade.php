@@ -187,7 +187,7 @@
             <div class="col-lg-7">
                 <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 border border-white border-opacity-20 mb-3">
                     <span class="badge bg-warning text-dark fw-bold rounded-pill px-2">TERAKREDITASI A</span>
-                    <small class="text-white fw-semibold">NPSN: {{ $profil['npsn'] }} • Kurikulum Merdeka</small>
+                    <small class="text-white fw-semibold">NPSN: {{ $profil['npsn'] }} • Kurikulum Nasional</small>
                 </div>
 
                 <h1 class="display-5 fw-bold text-white mb-3 lh-sm">
