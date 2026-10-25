@@ -31,6 +31,8 @@ class Pengelola extends Authenticatable
         'nip',
         'mapel',
         'jabatan',
+        'pendidikan',
+        'pengalaman',
         'foto',
         'no_hp',
     ];

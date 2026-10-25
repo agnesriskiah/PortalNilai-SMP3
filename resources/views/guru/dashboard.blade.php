@@ -69,7 +69,12 @@
                     <i class="bi bi-house me-1"></i> Beranda Publik
                 </a>
                 <div class="d-flex align-items-center gap-2 border-start ps-3">
-                    <img src="{{ asset($activeUser->foto ?? 'assets/img/users/guru.svg') }}" alt="Avatar" width="44" height="44" class="rounded-circle border border-2 border-success">
+                    @php
+                        $userPhoto = ($activeUser->foto && str_starts_with($activeUser->foto, 'foto_guru/'))
+                            ? route('guru.foto', $activeUser->id)
+                            : asset($activeUser->foto ?? 'assets/img/users/guru.svg');
+                    @endphp
+                    <img src="{{ $userPhoto }}" alt="Avatar" width="44" height="44" class="rounded-circle border border-2 border-success object-fit-cover">
                     <div class="d-none d-lg-block text-start">
                         <div class="fw-bold small text-dark lh-sm">{{ $activeUser->name }}</div>
                         <small class="text-success fw-semibold" style="font-size: 0.72rem;">{{ $activeUser->mapel ?? 'Matematika' }}</small>

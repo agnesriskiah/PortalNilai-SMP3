@@ -185,7 +185,7 @@
                                 <tr>
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center gap-3">
-                                            <img src="{{ asset($user->foto ?? 'assets/img/users/admin.svg') }}" alt="{{ $user->name }}" width="44" height="44" class="rounded-circle border p-0 bg-white">
+                                            <img src="{{ route('admin.guru.foto', $user->id) }}" alt="{{ $user->name }}" width="44" height="44" class="rounded-circle border p-0 bg-white object-fit-cover">
                                             <div>
                                                 <div class="fw-bold text-dark">{{ $user->name }}</div>
                                                 <small class="text-muted">{{ $user->no_hp ?? '-' }}</small>

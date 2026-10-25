@@ -28,4 +28,25 @@ class GuruController extends Controller
 
         return view('pages.guru', compact('profil', 'guru', 'search', 'mapel', 'daftarMapel'));
     }
+
+    /**
+     * Menampilkan file foto profil guru dari storage/foto_guru ke website publik
+     */
+    public function foto($id)
+    {
+        $guru = \App\Models\Pengelola::find($id);
+
+        if ($guru && $guru->foto) {
+            $storagePath = storage_path('foto_guru/' . basename($guru->foto));
+            if (file_exists($storagePath)) {
+                return response()->file($storagePath);
+            }
+
+            if (file_exists(public_path($guru->foto))) {
+                return response()->file(public_path($guru->foto));
+            }
+        }
+
+        abort(404);
+    }
 }

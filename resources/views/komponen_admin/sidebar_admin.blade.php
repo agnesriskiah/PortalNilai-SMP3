@@ -51,7 +51,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('guru') }}" class="nav-link text-white {{ request()->routeIs('guru*') ? 'active bg-primary' : '' }} d-flex align-items-center gap-2 py-2 px-3 rounded-3">
+            <a href="{{ route('admin.guru') }}" class="nav-link text-white {{ request()->routeIs('admin.guru*') ? 'active bg-primary' : '' }} d-flex align-items-center gap-2 py-2 px-3 rounded-3">
                 <i class="bi bi-people-fill text-warning fs-5"></i>
                 <span>Data Guru & Tenaga</span>
             </a>

@@ -55,10 +55,22 @@ class DatabaseInitService
                     $table->string('nip')->nullable();
                     $table->string('mapel')->nullable();
                     $table->string('jabatan')->nullable();
+                    $table->string('pendidikan')->nullable();
+                    $table->string('pengalaman')->nullable();
                     $table->string('foto')->nullable();
                     $table->string('no_hp')->nullable();
                     $table->rememberToken();
                     $table->timestamps();
+                });
+            } else {
+                // Pastikan kolom pendidikan & pengalaman tersedia jika tabel sudah ada sebelumnya
+                Schema::table('pengelola', function (Blueprint $table) {
+                    if (!Schema::hasColumn('pengelola', 'pendidikan')) {
+                        $table->string('pendidikan')->nullable()->after('jabatan');
+                    }
+                    if (!Schema::hasColumn('pengelola', 'pengalaman')) {
+                        $table->string('pengalaman')->nullable()->after('pendidikan');
+                    }
                 });
             }
 
@@ -107,7 +119,7 @@ class DatabaseInitService
     }
 
     /**
-     * Simpan 2 data dummy pengelola: Admin dan Guru lengkap dengan gambar
+     * Simpan data pengelola: Admin dan Dewan Guru lengkap ke tabel pengelola
      */
     public static function seedDummyPengelola(): void
     {
@@ -128,7 +140,7 @@ class DatabaseInitService
                 ]
             );
 
-            // Guru Dummy di tabel pengelola
+            // Akun Guru Utama
             Pengelola::updateOrCreate(
                 ['username' => 'guru'],
                 [
@@ -138,11 +150,157 @@ class DatabaseInitService
                     'role' => 'guru',
                     'nip' => '19800820 200501 1 008',
                     'mapel' => 'Matematika',
-                    'jabatan' => 'Wakil Kepala Sekolah / Guru Matematika',
+                    'jabatan' => 'Wakil Kepala Sekolah Bidang Kesiswaan / Guru Matematika',
+                    'pendidikan' => 'S2 Pendidikan Matematika - ITB',
+                    'pengalaman' => '19 Tahun',
                     'foto' => 'assets/img/users/guru.svg',
                     'no_hp' => '0812-3456-7890',
                 ]
             );
+
+            // Daftar Guru & Staf SMPN 3 lainnya
+            $daftarGuruAwal = [
+                [
+                    'username' => 'bambang',
+                    'name' => 'Drs. H. Bambang Sudarmono, M.Pd.',
+                    'nip' => '19680512 199303 1 004',
+                    'jabatan' => 'Kepala Sekolah',
+                    'mapel' => 'Manajemen Pendidikan',
+                    'pendidikan' => 'S2 Manajemen Pendidikan - Universitas Negeri',
+                    'pengalaman' => '31 Tahun',
+                    'email' => 'bambang.sudarmono@smpn3.sch.id',
+                    'no_hp' => '0812-1111-2222',
+                ],
+                [
+                    'username' => 'endang',
+                    'name' => 'Dra. Endang Sulistyowati',
+                    'nip' => '19710315 199601 2 002',
+                    'jabatan' => 'Wakil Kepala Sekolah Bidang Kurikulum',
+                    'mapel' => 'Pendidikan Pancasila & Kewarganegaraan',
+                    'pendidikan' => 'S1 PPKn - IKIP',
+                    'pengalaman' => '28 Tahun',
+                    'email' => 'endang.s@smpn3.sch.id',
+                    'no_hp' => '0812-2222-3333',
+                ],
+                [
+                    'username' => 'siti',
+                    'name' => 'Siti Rahmawati, S.Pd.',
+                    'nip' => '19850410 200902 2 005',
+                    'jabatan' => 'Guru Pengampu / Wali Kelas 7-A',
+                    'mapel' => 'Bahasa Indonesia',
+                    'pendidikan' => 'S1 Pendidikan Bahasa & Sastra Indonesia',
+                    'pengalaman' => '15 Tahun',
+                    'email' => 'siti.rahmawati@smpn3.sch.id',
+                    'no_hp' => '0812-4444-5555',
+                ],
+                [
+                    'username' => 'nurul',
+                    'name' => 'Nurul Hidayah, S.Si.',
+                    'nip' => '19870914 201101 2 009',
+                    'jabatan' => 'Guru Pengampu / Kepala Lab IPA / Wali Kelas 9-C',
+                    'mapel' => 'Ilmu Pengetahuan Alam (IPA)',
+                    'pendidikan' => 'S1 Biologi Murni - UGM',
+                    'pengalaman' => '13 Tahun',
+                    'email' => 'nurul.hidayah@smpn3.sch.id',
+                    'no_hp' => '0812-5555-6666',
+                ],
+                [
+                    'username' => 'ratna',
+                    'name' => 'Ratna Sari, M.Pd.',
+                    'nip' => '19890224 201403 2 003',
+                    'jabatan' => 'Guru Pengampu / Pembina OSIS / Wali Kelas 9-A',
+                    'mapel' => 'Bahasa Inggris',
+                    'pendidikan' => 'S2 Pendidikan Bahasa Inggris - UI',
+                    'pengalaman' => '10 Tahun',
+                    'email' => 'ratna.sari@smpn3.sch.id',
+                    'no_hp' => '0812-6666-7777',
+                ],
+                [
+                    'username' => 'budi',
+                    'name' => 'Budi Santoso, S.Kom.',
+                    'nip' => '19910618 201801 1 006',
+                    'jabatan' => 'Guru Informatika / Koordinator Lab Komputer & CBT',
+                    'mapel' => 'Informatika',
+                    'pendidikan' => 'S1 Teknik Informatika - ITS',
+                    'pengalaman' => '8 Tahun',
+                    'email' => 'budi.santoso@smpn3.sch.id',
+                    'no_hp' => '0812-7777-8888',
+                ],
+                [
+                    'username' => 'ahmad',
+                    'name' => 'Drs. Ahmad Zaini',
+                    'nip' => '19731205 199903 1 005',
+                    'jabatan' => 'Guru Pengampu / Pembina Pramuka',
+                    'mapel' => 'Ilmu Pengetahuan Sosial (IPS)',
+                    'pendidikan' => 'S1 Pendidikan Sejarah',
+                    'pengalaman' => '25 Tahun',
+                    'email' => 'ahmad.zaini@smpn3.sch.id',
+                    'no_hp' => '0812-8888-9999',
+                ],
+                [
+                    'username' => 'fauzan',
+                    'name' => 'Ust. Fauzan, S.Pd.I',
+                    'nip' => '19860111 201001 1 012',
+                    'jabatan' => 'Guru Agama / Pembina Rohis',
+                    'mapel' => 'Pendidikan Agama Islam',
+                    'pendidikan' => 'S1 Pendidikan Agama Islam - UIN',
+                    'pengalaman' => '14 Tahun',
+                    'email' => 'fauzan@smpn3.sch.id',
+                    'no_hp' => '0812-9999-0000',
+                ],
+                [
+                    'username' => 'aris',
+                    'name' => 'Aris Munandar, S.Pd.',
+                    'nip' => '19921103 201902 1 007',
+                    'jabatan' => 'Guru PJOK / Pembina Ekstrakurikuler Olahraga',
+                    'mapel' => 'Pendidikan Jasmani & Olahraga',
+                    'pendidikan' => 'S1 Pendidikan Kepelatihan Olahraga',
+                    'pengalaman' => '7 Tahun',
+                    'email' => 'aris.munandar@smpn3.sch.id',
+                    'no_hp' => '0813-1111-3333',
+                ],
+                [
+                    'username' => 'dewi',
+                    'name' => 'Dewi Lestari, S.Sn.',
+                    'nip' => '19900722 201503 2 008',
+                    'jabatan' => 'Guru Seni Budaya / Pembina Tari & Karawitan',
+                    'mapel' => 'Seni Budaya & Prakarya',
+                    'pendidikan' => 'S1 Seni Rupa & Desain - ISI',
+                    'pengalaman' => '9 Tahun',
+                    'email' => 'dewi.lestari@smpn3.sch.id',
+                    'no_hp' => '0813-2222-4444',
+                ],
+                [
+                    'username' => 'rina',
+                    'name' => 'Rina Kusumawati, S.Psi.',
+                    'nip' => '19881008 201202 2 004',
+                    'jabatan' => 'Guru Bimbingan Konseling (BK)',
+                    'mapel' => 'Bimbingan & Konseling',
+                    'pendidikan' => 'S1 Psikologi Pendidikan',
+                    'pengalaman' => '12 Tahun',
+                    'email' => 'rina.bk@smpn3.sch.id',
+                    'no_hp' => '0813-3333-5555',
+                ],
+            ];
+
+            foreach ($daftarGuruAwal as $g) {
+                Pengelola::updateOrCreate(
+                    ['username' => $g['username']],
+                    [
+                        'name' => $g['name'],
+                        'email' => $g['email'],
+                        'password' => Hash::make('guru123'),
+                        'role' => 'guru',
+                        'nip' => $g['nip'],
+                        'mapel' => $g['mapel'],
+                        'jabatan' => $g['jabatan'],
+                        'pendidikan' => $g['pendidikan'],
+                        'pengalaman' => $g['pengalaman'],
+                        'foto' => 'assets/img/users/guru.svg',
+                        'no_hp' => $g['no_hp'],
+                    ]
+                );
+            }
         } catch (Exception $e) {
             logger()->error('SeedDummyPengelola error: ' . $e->getMessage());
         }
